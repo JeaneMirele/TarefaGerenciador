@@ -96,7 +96,7 @@ public class TarefaDAO {
             stmt.setLong(7, tarefa.getId());
             stmt.executeUpdate();
 
-            System.out.println("Tarefa atualizada com sucesso!");
+            System.out.println("Tarefa atualizada com sucesso!abc");
 
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar tarefa: " + e.getMessage());

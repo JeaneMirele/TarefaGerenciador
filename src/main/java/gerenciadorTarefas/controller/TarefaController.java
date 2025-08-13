@@ -16,6 +16,7 @@ import gerenciadorTarefas.model.Tarefa;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+
 @ManagedBean(name="tarefaController")
 @ViewScoped
 public class TarefaController implements Serializable {
@@ -23,15 +24,25 @@ public class TarefaController implements Serializable {
 	
 		private TarefaDAO daoTarefa = new TarefaDAO();
 	    private List<Tarefa> tarefas = new ArrayList<>();
-	    private Tarefa tarefaSelecionada = new Tarefa();
+	    private Tarefa tarefaSelecionada;
 	    private List<String> listaResponsaveis;
-	    private List<String>  listaPrioridades;
+	    private List<String> listaPrioridades;
 	    private String filtroNumero;
 	    private String filtroTitulo;
 	    private String filtroSituacao;
 	    private String filtroResponsavel;
-	    
+	    private String idParam;
 	  
+
+
+		public String getIdParam() {
+			return idParam;
+		}
+
+
+		public void setIdParam(String idParam) {
+			this.idParam = idParam;
+		}
 
 
 		public String getFiltroNumero() {
@@ -76,7 +87,7 @@ public class TarefaController implements Serializable {
 
 		@PostConstruct
 	    public void init() {
-			
+	     
 			this.daoTarefa = new TarefaDAO();
 	        this.listaPrioridades = Arrays.asList("Alta", "Média", "Baixa");
 	        this.listaResponsaveis = Arrays.asList("Joana", "Mariana", "Pedro");
@@ -86,11 +97,30 @@ public class TarefaController implements Serializable {
 	            FacesContext.getCurrentInstance().addMessage(null, 
 	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao carregar dados: " + e.getMessage(), null));
 	        }
+	        
+	        String idParam = FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .getRequestParameterMap()
+                    .get("id");
+	        
+	        if (idParam != null && !idParam.isEmpty()) {
+	            try {
+	                Long id = Long.parseLong(idParam);
+	                this.tarefaSelecionada = daoTarefa.buscarPorId(id);
+	            } catch (NumberFormatException e) {
+	                FacesContext.getCurrentInstance().addMessage(null, 
+	                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "ID de tarefa inválido.", null));
+	            }
+	        }  else {
+                
+                this.tarefaSelecionada = new Tarefa();
+            }
+	          
 		}
 	    
+		
 
 		public String prepararCadastro() {
-	        this.tarefaSelecionada = new Tarefa();
 	        return "cadastro?faces-redirect=true";
 	    }
 		
@@ -102,13 +132,6 @@ public class TarefaController implements Serializable {
 	        	daoTarefa.atualizar(tarefaSelecionada);
 	        }
 	        return "lista-tarefas?faces-redirect=true";
-	    }
-
-	    
-
-	    public String editar(Tarefa tarefa) {
-	        this.tarefaSelecionada = tarefa;
-	        return "cadastro?faces-redirect=true";
 	    }
 
 	
@@ -140,8 +163,7 @@ public class TarefaController implements Serializable {
 	            
 	       return "lista-tarefas?faces-redirect=true";
 	    }
-	    
-
+	   
 	   
 	    public String listar() {
 	    	daoTarefa.listarTodos();

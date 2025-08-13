@@ -3,103 +3,103 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<h:head>
-    <title>Listagem de Tarefas</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #ccc;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        fieldset {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        legend {
-            font-weight: bold;
-        }
-        .form-row {
-            margin-bottom: 10px;
-        }
-        .form-row label {
-            margin-right: 10px;
-        }
-    </style>
-</h:head>
+<f:view>
+    <h:head>
+        <title>Listagem de Tarefas</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+              rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+              crossorigin="anonymous" />
+        <h:outputStylesheet library="css" name="style.css" />
+    </h:head>
 
-<h:body>
+    <h:body>
+        <div class="container mt-5">
+            <h2 class="mb-4 text-center">Listagem de Tarefas</h2>
 
-<h:form>
-    <fieldset>
-        <legend>Listagem de Tarefas</legend>
-        <h:messages globalOnly="true" showDetail="true" showSummary="true" />
+            <h:form>
+                <h:messages globalOnly="true" showDetail="true" showSummary="true"
+                            styleClass="alert alert-info" />
 
-        <div class="form-row">
-            <h:outputLabel for="numero" value="Número:" />
-            <h:inputText id="numero" value="#{tarefaController.filtroNumero}" />
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Número:</label>
+                        <h:inputText id="numero" value="#{tarefaController.filtroNumero}" 
+                                     styleClass="form-control" />
+                    </div>
 
-            <h:outputLabel for="titulo" value="Título/Descrição:" />
-            <h:inputText id="titulo" value="#{tarefaController.filtroTitulo}" />
+                    <div class="col-md-5">
+                        <label class="form-label">Título/Descrição:</label>
+                        <h:inputText id="titulo" value="#{tarefaController.filtroTitulo}" 
+                                     styleClass="form-control" />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Responsável:</label>
+                        <h:selectOneMenu value="#{tarefaController.filtroResponsavel}" 
+                                         styleClass="form-select">
+                            <f:selectItem itemLabel="Selecione" itemValue="" />
+                            <f:selectItems value="#{tarefaController.listaResponsaveis}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Situação:</label>
+                        <h:selectOneMenu id="situacao" value="#{tarefaController.filtroSituacao}" 
+                                         styleClass="form-select">
+                            <f:selectItem itemLabel="Selecione" itemValue="" />
+                            <f:selectItem itemLabel="Em andamento" itemValue="EM ANDAMENTO" />
+                            <f:selectItem itemLabel="Concluída" itemValue="CONCLUIDA" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-end">
+                        <h:commandButton value="Buscar Tarefas" action="#{tarefaController.buscar()}" 
+                                         styleClass="btn btn-primary w-100" />
+                    </div>
+                </div>
+
+                <div class="table-responsive mb-4">
+                    <h:dataTable value="#{tarefaController.tarefas}" var="t"
+                                 styleClass="table table-bordered table-striped align-middle">
+                        <h:column>
+                            <f:facet name="header">Número</f:facet>
+                            #{t.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Título</f:facet>
+                            #{t.titulo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Responsável</f:facet>
+                            #{t.responsavel}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Situação</f:facet>
+                            #{t.situacao}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Ações</f:facet>
+                            <h:commandLink value="Editar" action="editar"
+                                           styleClass="btn btn-sm btn-warning me-1" >
+                           		 <f:param name="id" value="#{t.id}" />
+                            </h:commandLink>
+                            
+                            <h:commandLink value="Excluir" action="#{tarefaController.excluir(t)}"
+                                           styleClass="btn btn-sm btn-danger me-1" />
+                            <h:commandLink value="Concluir" action="#{tarefaController.concluir(t)}"
+                                           styleClass="btn btn-sm btn-success"
+                                           rendered="#{t.situacao != 'CONCLUIDA'}"/>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+
+                <h:commandButton value="Nova Tarefa" action="#{tarefaController.prepararCadastro()}" 
+                                 styleClass="btn btn-success" />
+            </h:form>
         </div>
-        
-        <div class="form-row">
-            <h:outputText value="Responsável:" />
-            <h:selectOneMenu value="#{tarefaController.filtroResponsavel}">
-             <f:selectItems value="#{tarefaController.listaResponsaveis}" />
-            </h:selectOneMenu>
-            
-           
-            <h:outputLabel for="situacao" value="Situação:" />
-            <h:selectOneMenu id="situacao" value="#{tarefaController.filtroSituacao}">
-                <f:selectItem itemLabel="Selecione" itemValue="" />
-                <f:selectItem itemLabel="Em andamento" itemValue="EM ANDAMENTO" />
-                <f:selectItem itemLabel="Concluída" itemValue="CONCLUIDA" />
-            </h:selectOneMenu>
-
-            <h:commandButton value="Buscar Tarefas" action="#{tarefaController.buscar()}" />
-        </div>
-
-        <h:dataTable value="#{tarefaController.tarefas}" var="t"
-                     border="1" style="width:100%; border-collapse: collapse;">
-            <h:column>
-                <f:facet name="header">Número</f:facet>
-                #{t.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Título</f:facet>
-                #{t.titulo}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Responsável</f:facet>
-                #{t.responsavel}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Situação</f:facet>
-                #{t.situacao}
-            </h:column>
-            
-            <h:column>
-                <f:facet name="header">Ações</f:facet>
-                <h:commandLink value="Editar" action="#{tarefaController.editar(t)}"/> |
-                <h:commandLink value="Excluir" action="#{tarefaController.excluir(t)}"/> |
-                <h:commandLink value="Concluir" action="#{tarefaController.concluir(t)}"/>
-            </h:column>
-            
-        </h:dataTable>
-        <h:commandButton value="Nova Tarefa" action="#{tarefaController.prepararCadastro()}" />
-                
-    </fieldset>
-</h:form>
-
-</h:body>
+    </h:body>
+</f:view>
 </html>

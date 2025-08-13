@@ -82,12 +82,16 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">Ações</f:facet>
-                            <h:commandLink value="Editar" action="#{tarefaController.editar(t)}"
-                                           styleClass="btn btn-sm btn-warning me-1" />
+                            <h:commandLink value="Editar" action="editar"
+                                           styleClass="btn btn-sm btn-warning me-1" >
+                           		 <f:param name="id" value="#{t.id}" />
+                            </h:commandLink>
+                            
                             <h:commandLink value="Excluir" action="#{tarefaController.excluir(t)}"
                                            styleClass="btn btn-sm btn-danger me-1" />
                             <h:commandLink value="Concluir" action="#{tarefaController.concluir(t)}"
-                                           styleClass="btn btn-sm btn-success" />
+                                           styleClass="btn btn-sm btn-success"
+                                           rendered="#{t.situacao != 'CONCLUIDA'}"/>
                         </h:column>
                     </h:dataTable>
                 </div>
