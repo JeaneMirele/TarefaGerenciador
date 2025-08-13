@@ -45,10 +45,16 @@ Dependência JSF 2.3 (conforme o arquivo pom.xml)
 
 Tabela: tarefa
 id SERIAL PRIMARY KEY,
+
 titulo VARCHAR(30) NOT NULL,
+
 descricao TEXT, 
+
 responsavel VARCHAR(255),
+
 prioridade VARCHAR(50),
+
 deadline VARCHAR(15),
+
 situacao VARCHAR(50)
 
