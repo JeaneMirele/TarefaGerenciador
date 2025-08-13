@@ -1,6 +1,7 @@
 package gerenciadorTarefas.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Tarefa {
@@ -111,6 +112,35 @@ public class Tarefa {
 		public void setSituacao(String situacao) {
 			this.situacao = situacao;
 		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(deadline, descricao, id, prioridade, responsavel, situacao, titulo);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Tarefa other = (Tarefa) obj;
+			return Objects.equals(deadline, other.deadline) && Objects.equals(descricao, other.descricao)
+					&& Objects.equals(id, other.id) && Objects.equals(prioridade, other.prioridade)
+					&& Objects.equals(responsavel, other.responsavel) && Objects.equals(situacao, other.situacao)
+					&& Objects.equals(titulo, other.titulo);
+		}
+
+		@Override
+		public String toString() {
+			return "Tarefa [id=" + id + ", titulo=" + titulo + ", descricao=" + descricao + ", responsavel="
+					+ responsavel + ", prioridade=" + prioridade + ", deadline=" + deadline + ", situacao=" + situacao
+					+ "]";
+		}
+			
+				
 
 }
 

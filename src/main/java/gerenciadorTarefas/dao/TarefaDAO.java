@@ -117,74 +117,55 @@ public class TarefaDAO {
             System.err.println("Erro ao excluir tarefa: " + e.getMessage());
         }
     }
-    
-    public List<Tarefa> buscaTitulo(String texto) {
-        String sql = "SELECT * FROM tarefas WHERE LOWER(titulo) LIKE LOWER(?)";
+
+
+    public List<Tarefa> buscar(String responsavel, String titulo, String situacao, String numero) {
+        int cont = 0; 
+        String sql = "SELECT * FROM tarefas WHERE 1=1";
+        
+        if(responsavel != null && !responsavel.isEmpty()) {
+            sql += " AND responsavel = ?";
+        }
+        
+     
+        if(titulo != null && !titulo.isEmpty()) {
+            sql += " AND titulo LIKE ?";
+        }
+        
+        if(situacao != null && !situacao.isEmpty()) {
+            sql += " AND situacao = ?";
+        }
+        
+        if(numero != null && !numero.isEmpty()) {
+            sql += " AND id = ?";
+        }
+        
         List<Tarefa> tarefas = new ArrayList<>();
         
-        try (Connection conn = ConnectionFactory.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, "%" + texto + "%");
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Tarefa tarefa = new Tarefa();
-                 
-                    tarefa.setId(rs.getLong("id"));
-                    tarefas.add(tarefa);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar tarefas por título: " + e.getMessage());
-        }
-        return tarefas;
-    }
-    
-    
-    public List<Tarefa> buscaSituacao(String situacao) {
-        String sql = "SELECT * FROM tarefas WHERE situacao = ?";
-        List<Tarefa> tarefas = new ArrayList<>();
-        
-        try (Connection conn = ConnectionFactory.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, situacao.toUpperCase());
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Tarefa tarefa = new Tarefa();
-                    
-                    tarefa.setId(rs.getLong("id"));
-                    tarefa.setTitulo(rs.getString("titulo"));
-                    tarefa.setDescricao(rs.getString("descricao"));
-                    tarefa.setResponsavel(rs.getString("responsavel"));
-                    tarefa.setPrioridade(rs.getString("prioridade"));
-                    tarefa.setDeadline(rs.getObject("deadline", LocalDate.class));
-                    tarefa.setSituacao(rs.getString("situacao"));
-                    tarefas.add(tarefa);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar tarefas por situação: " + e.getMessage());
-        }
-        return tarefas;
-    }
-
-    public List<Tarefa> buscaResponsavel(String responsavel) {
-        if (responsavel == null || responsavel.trim().isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        String sql = "SELECT * FROM tarefas WHERE responsavel = ?";
-        List<Tarefa> tarefas = new ArrayList<>();
-
         try (
             Connection conn = ConnectionFactory.connect();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setString(1, responsavel);
-
+            if(responsavel != null && !responsavel.isEmpty()) {
+                cont++;
+                stmt.setString(cont, responsavel);
+            }
+         
+            if(titulo != null && !titulo.isEmpty()) {
+                cont++;
+                stmt.setString(cont, "%" + titulo + "%");
+            }
+            
+            if(situacao != null && !situacao.isEmpty()) {
+                cont++;
+                stmt.setString(cont, situacao);
+            }
+            
+            if(numero != null && !numero.isEmpty()) {
+                cont++;
+                stmt.setLong(cont, Long.parseLong(numero));
+            }
+            
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Tarefa tarefa = new Tarefa();
@@ -198,14 +179,12 @@ public class TarefaDAO {
                     tarefas.add(tarefa);
                 }
             }
-        
         } catch (SQLException e) {
-            System.err.println("Erro ao buscar tarefas por responsável: " + e.getMessage());
-            throw new RuntimeException("Erro na busca por responsável", e);
+            System.err.println("Erro ao buscar tarefas: " + e.getMessage());
+            throw new RuntimeException("Erro na busca", e);
         }
-
         return tarefas;
     }
-
-
+   
+    
 }

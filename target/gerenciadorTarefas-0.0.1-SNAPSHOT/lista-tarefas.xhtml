@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Listagem de Tarefas</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #ccc;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        legend {
+            font-weight: bold;
+        }
+        .form-row {
+            margin-bottom: 10px;
+        }
+        .form-row label {
+            margin-right: 10px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+<h:form>
+    <fieldset>
+        <legend>Listagem de Tarefas</legend>
+        <h:messages globalOnly="true" showDetail="true" showSummary="true" />
+
+        <div class="form-row">
+            <h:outputLabel for="numero" value="Número:" />
+            <h:inputText id="numero" value="#{tarefaController.filtroNumero}" />
+
+            <h:outputLabel for="titulo" value="Título/Descrição:" />
+            <h:inputText id="titulo" value="#{tarefaController.filtroTitulo}" />
+        </div>
+        
+        <div class="form-row">
+            <h:outputText value="Responsável:" />
+            <h:selectOneMenu value="#{tarefaController.filtroResponsavel}">
+             <f:selectItems value="#{tarefaController.listaResponsaveis}" />
+            </h:selectOneMenu>
+            
+           
+            <h:outputLabel for="situacao" value="Situação:" />
+            <h:selectOneMenu id="situacao" value="#{tarefaController.filtroSituacao}">
+                <f:selectItem itemLabel="Selecione" itemValue="" />
+                <f:selectItem itemLabel="Em andamento" itemValue="EM ANDAMENTO" />
+                <f:selectItem itemLabel="Concluída" itemValue="CONCLUIDA" />
+            </h:selectOneMenu>
+
+            <h:commandButton value="Buscar Tarefas" action="#{tarefaController.buscar()}" />
+        </div>
+
+        <h:dataTable value="#{tarefaController.tarefas}" var="t"
+                     border="1" style="width:100%; border-collapse: collapse;">
+            <h:column>
+                <f:facet name="header">Número</f:facet>
+                #{t.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Título</f:facet>
+                #{t.titulo}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Responsável</f:facet>
+                #{t.responsavel}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Situação</f:facet>
+                #{t.situacao}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+                <h:commandLink value="Editar" action="#{tarefaController.editar(t)}"/> |
+                <h:commandLink value="Excluir" action="#{tarefaController.excluir(t)}"/> |
+                <h:commandLink value="Concluir" action="#{tarefaController.concluir(t)}"/>
+            </h:column>
+            
+        </h:dataTable>
+        <h:commandButton value="Nova Tarefa" action="#{tarefaController.prepararCadastro()}" />
+                
+    </fieldset>
+</h:form>
+
+</h:body>
+</html>

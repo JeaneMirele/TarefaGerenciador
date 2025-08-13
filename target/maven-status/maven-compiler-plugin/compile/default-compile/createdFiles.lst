@@ -1,0 +1,5 @@
+gerenciadorTarefas\controller\TarefaController.class
+gerenciadorTarefas\dao\ConnectionFactory.class
+gerenciadorTarefas\dao\TarefaDAO.class
+gerenciadorTarefas\conversor\LocalDateStrictConverter.class
+gerenciadorTarefas\model\Tarefa.class

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -18,60 +19,75 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean(name="tarefaController")
 @ViewScoped
 public class TarefaController implements Serializable {
+    private static final long serialVersionUID = 1L;
 	
-		private TarefaDAO daoTarefa;
-	    private List<Tarefa> tarefas;
-	    private Tarefa tarefaSelecionada;
+		private TarefaDAO daoTarefa = new TarefaDAO();
+	    private List<Tarefa> tarefas = new ArrayList<>();
+	    private Tarefa tarefaSelecionada = new Tarefa();
 	    private List<String> listaResponsaveis;
 	    private List<String>  listaPrioridades;
-	    private String buscaNumero;
-	    private String buscaTitulo;
-	    private String buscaSituacao;
-
-	    public TarefaController() {};
+	    private String filtroNumero;
+	    private String filtroTitulo;
+	    private String filtroSituacao;
+	    private String filtroResponsavel;
 	    
-	    public String getBuscaNumero() {
-			return buscaNumero;
+	  
+
+
+		public String getFiltroNumero() {
+			return filtroNumero;
 		}
 
 
-		public void setBuscaNumero(String buscaNumero) {
-			this.buscaNumero = buscaNumero;
+		public void setFiltroNumero(String filtroNumero) {
+			this.filtroNumero = filtroNumero;
 		}
 
 
-		public String getBuscaTitulo() {
-			return buscaTitulo;
+		public String getFiltroTitulo() {
+			return filtroTitulo;
 		}
 
 
-		public void setBuscaTitulo(String buscaTitulo) {
-			this.buscaTitulo = buscaTitulo;
+		public void setFiltroTitulo(String filtroTitulo) {
+			this.filtroTitulo = filtroTitulo;
 		}
 
 
-		public String getBuscaSituacao() {
-			return buscaSituacao;
+		public String getFiltroSituacao() {
+			return filtroSituacao;
 		}
 
 
-		public void setBuscaSituacao(String buscaSituacao) {
-			this.buscaSituacao = buscaSituacao;
+		public void setFiltroSituacao(String filtroSituacao) {
+			this.filtroSituacao = filtroSituacao;
+		}
+
+
+		public String getFiltroResponsavel() {
+			return filtroResponsavel;
+		}
+
+
+		public void setFiltroResponsavel(String filtroResponsavel) {
+			this.filtroResponsavel = filtroResponsavel;
 		}
 
 
 		@PostConstruct
 	    public void init() {
+			
 			this.daoTarefa = new TarefaDAO();
-	        this.tarefaSelecionada = new Tarefa();
 	        this.listaPrioridades = Arrays.asList("Alta", "Média", "Baixa");
+	        this.listaResponsaveis = Arrays.asList("Joana", "Mariana", "Pedro");
 	        try {
 	            this.tarefas = daoTarefa.listarTodos();
 	        } catch (Exception e) {
 	            FacesContext.getCurrentInstance().addMessage(null, 
 	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao carregar dados: " + e.getMessage(), null));
 	        }
-	    }
+		}
+	    
 
 		public String prepararCadastro() {
 	        this.tarefaSelecionada = new Tarefa();
@@ -88,52 +104,45 @@ public class TarefaController implements Serializable {
 	        return "lista-tarefas?faces-redirect=true";
 	    }
 
-	    public String excluir() {
-	        if (tarefaSelecionada == null || tarefaSelecionada.getId() == null) {
-	            FacesContext.getCurrentInstance().addMessage(
-	                null,
-	                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-	                    "Selecione uma tarefa antes de excluir", null)
-	            );
-	            return null; 
-	        }
-	        
-	        try {
-	            daoTarefa.excluir(tarefaSelecionada.getId());
-	            this.tarefas = daoTarefa.listarTodos(); 
-	            
-	            FacesContext.getCurrentInstance().addMessage(
-	                null,
-	                new FacesMessage(FacesMessage.SEVERITY_INFO, 
-	                    "Tarefa excluída com sucesso!", null)
-	            );
-	        } catch (Exception e) {
-	            FacesContext.getCurrentInstance().addMessage(
-	                null,
-	                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-	                    "Erro ao excluir tarefa: " + e.getMessage(), null)
-	            );
-	        }
-	        
-	        return null; 
-	        
-	        
-	    }
-
+	    
 
 	    public String editar(Tarefa tarefa) {
 	        this.tarefaSelecionada = tarefa;
-	        return "editar?faces-redirect=true" + tarefa.getId();
+	        return "cadastro?faces-redirect=true";
 	    }
 
+	
+	    public String excluir(Tarefa tarefa) {
+	        try {
+	            daoTarefa.excluir(tarefa.getId());
+	            this.tarefas = daoTarefa.listarTodos();
+
+	            FacesContext.getCurrentInstance().addMessage(null, 
+	                new FacesMessage(FacesMessage.SEVERITY_INFO, "Tarefa excluída com sucesso!", null));
+	        } catch (Exception e) {
+	            FacesContext.getCurrentInstance().addMessage(null, 
+	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao excluir tarefa: " + e.getMessage(), null));
+	        }
+
+	      return "lista-tarefas?faces-redirect=true";
+	    }
+
+	 
 	    public String concluir(Tarefa tarefa) {
-	        this.tarefaSelecionada = tarefa;
-	        tarefaSelecionada.setSituacao("CONCLUIDA");
-	        daoTarefa.atualizar(tarefaSelecionada);
+	        tarefa.setSituacao("CONCLUIDA");
+	        daoTarefa.atualizar(tarefa);
+	        
+	     
 	        this.tarefas = daoTarefa.listarTodos();
-	        return null;
+	        
+	        FacesContext.getCurrentInstance().addMessage(null, 
+	            new FacesMessage(FacesMessage.SEVERITY_INFO, "Tarefa concluída com sucesso!", null));
+	            
+	       return "lista-tarefas?faces-redirect=true";
 	    }
 	    
+
+	   
 	    public String listar() {
 	    	daoTarefa.listarTodos();
 	    	return "lista-tarefas?faces-redirect=true";
@@ -146,43 +155,16 @@ public class TarefaController implements Serializable {
 	    }
 	  
 	    public void buscar() {
-	        
-	        if ((buscaNumero == null || buscaNumero.isEmpty()) &&
-	            (buscaTitulo == null || buscaTitulo.isEmpty()) &&
-	            (buscaSituacao == null || buscaSituacao.isEmpty()) &&
-	            (tarefaSelecionada.getResponsavel() == null || tarefaSelecionada.getResponsavel().isEmpty())) {
-	            
-	            this.tarefas = daoTarefa.listarTodos();
-	            return;
-	        }
-	  
-	        if (buscaNumero != null && !buscaNumero.isEmpty()) {
-	            try {
-	                Long id = Long.parseLong(buscaNumero);
-	                Tarefa tarefa = daoTarefa.buscarPorId(id);
-	                this.tarefas = tarefa != null ? Arrays.asList(tarefa) : new ArrayList<>();
-	                return; 
-	            } catch (NumberFormatException e) {
-	                FacesContext.getCurrentInstance().addMessage(null,
-	                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Número inválido", null));
-	                return;
-	            }
-	        }
-	      
-	        if (buscaTitulo != null && !buscaTitulo.isEmpty()) {
-	            this.tarefas = daoTarefa.buscaTitulo(buscaTitulo);
-	            return;
-	        }
-
-	        if (buscaSituacao != null && !buscaSituacao.isEmpty()) {
-	            this.tarefas = daoTarefa.buscaSituacao(buscaSituacao);
-	            return;
-	        }
-
-	 
-	        if (tarefaSelecionada.getResponsavel() != null && !tarefaSelecionada.getResponsavel().isEmpty()) {
-	            this.tarefas = daoTarefa.buscaResponsavel(tarefaSelecionada.getResponsavel());
-	        }
+	    	
+	    	if((filtroNumero == null || filtroNumero.trim().isEmpty()) &&
+    	        (filtroTitulo == null || filtroTitulo.trim().isEmpty()) &&
+    	        (filtroSituacao == null || filtroSituacao.trim().isEmpty()) &&
+    	        (filtroResponsavel == null || filtroResponsavel.trim().isEmpty()))
+    	    {
+	    		this.tarefas = daoTarefa.listarTodos();
+	    	}else {
+	    		this.tarefas = daoTarefa.buscar(filtroResponsavel, filtroTitulo, filtroSituacao,filtroNumero);
+	    	}     
 	    }
 
 
@@ -217,9 +199,36 @@ public class TarefaController implements Serializable {
 		public void setListaPrioridades(List<String> listaPrioridades) {
 			this.listaPrioridades = listaPrioridades;
 		}
-	    
 
-	}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(filtroNumero, filtroResponsavel, filtroSituacao, filtroTitulo, listaPrioridades,
+					listaResponsaveis, tarefaSelecionada, tarefas);
+		}
+
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			TarefaController other = (TarefaController) obj;
+			return Objects.equals(filtroNumero, other.filtroNumero)
+					&& Objects.equals(filtroResponsavel, other.filtroResponsavel)
+					&& Objects.equals(filtroSituacao, other.filtroSituacao)
+					&& Objects.equals(filtroTitulo, other.filtroTitulo)
+					&& Objects.equals(listaPrioridades, other.listaPrioridades)
+					&& Objects.equals(listaResponsaveis, other.listaResponsaveis)
+					&& Objects.equals(tarefaSelecionada, other.tarefaSelecionada)
+					&& Objects.equals(tarefas, other.tarefas);
+		}
+
+
+}
 
 
 

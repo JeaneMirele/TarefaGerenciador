@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:head>
+        <title>Cadastrar Tarefa</title>
+    </h:head>
+    <h:body>
+        <h1>Cadastrar Tarefa</h1>
+        <h:form>
+            <h:panelGrid columns="2">
+
+                <h:outputText value="Título:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.titulo}" />
+
+                <h:outputText value="Descrição:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.descricao}" />
+				
+				<h:outputText value="Responsável:" />
+                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.responsavel}">
+                       <f:selectItems value="#{tarefaController.listaResponsaveis}" />
+                </h:selectOneMenu>
+
+
+                <h:outputText value="Prioridade:" />
+                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.prioridade}">
+                    <f:selectItem itemLabel="Selecione" itemValue="" />
+				    <f:selectItem itemLabel="Baixa" itemValue="Baixa" />
+				    <f:selectItem itemLabel="Média" itemValue="Média" />
+				    <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                </h:selectOneMenu>
+                
+                <h:outputText value="Deadline:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.deadline}">
+                    <f:converter converterId="localDateStrictConverter"/>
+                </h:inputText>
+                <h:outputText value="Formato: dd/MM/aaaa" style="font-size: 0.8em; color: gray;"/>
+
+            </h:panelGrid>
+            <h:commandButton value="Salvar" action="#{tarefaController.save()}" />
+            <h:commandButton value="Cancelar" action="lista-tarefas?faces-redirect=true" />
+          
+        </h:form>
+
+    </h:body>
+</f:view>
+</html>

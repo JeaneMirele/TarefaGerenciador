@@ -2,50 +2,75 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+
 <f:view>
     <h:head>
         <title>Cadastrar Tarefa</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+              rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+              crossorigin="anonymous" />
+        <h:outputStylesheet library="css" name="style.css" />
     </h:head>
+
     <h:body>
-        <h1>Cadastrar Tarefa</h1>
-        <h:form>
-            <h:panelGrid columns="2">
+        <div class="container mt-5">
+            <div class="mb-4 text-center">
+                <h2>Cadastrar Tarefa</h2>
+            </div>
 
-                <h:outputText value="Título:" />
-                <h:inputText value="#{tarefaController.tarefaSelecionada.titulo}" />
+            <h:form>
+                <div class="mb-3">
+                    <label class="form-label">Título:</label>
+                    <h:inputText value="#{tarefaController.tarefaSelecionada.titulo}" 
+                                 styleClass="form-control" />
+                </div>
 
-                <h:outputText value="Descrição:" />
-                <h:inputText value="#{tarefaController.tarefaSelecionada.descricao}" />
-				
-				<h:outputText value="Responsável:" />
-                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.responsavel}">
-                    <f:selectItem itemLabel="Selecione" itemValue="" />
-				    <f:selectItem itemLabel="João Lopes" itemValue="João Lopes" />
-				    <f:selectItem itemLabel="Maria Maia" itemValue="Maria Maia" />
-				    <f:selectItem itemLabel="Rafael Cordeiro" itemValue="Rafael Cordeiro" />
-                </h:selectOneMenu>
+                <div class="mb-3">
+                    <label class="form-label">Descrição:</label>
+                    <h:inputText value="#{tarefaController.tarefaSelecionada.descricao}" 
+                                 styleClass="form-control" />
+                </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Responsável:</label>
+                    <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.responsavel}" 
+                                     styleClass="form-select">
+                        <f:selectItem itemLabel="Selecione" itemValue="" />
+                       <f:selectItems value="#{tarefaController.listaResponsaveis}" />
+                    </h:selectOneMenu>
+                </div>
 
-                <h:outputText value="Prioridade:" />
-                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.prioridade}">
-                    <f:selectItem itemLabel="Selecione" itemValue="" />
-				    <f:selectItem itemLabel="Baixa" itemValue="Baixa" />
-				    <f:selectItem itemLabel="Média" itemValue="Média" />
-				    <f:selectItem itemLabel="Alta" itemValue="Alta" />
-                </h:selectOneMenu>
-                
-                <h:outputText value="Deadline:" />
-                <h:inputText value="#{tarefaController.tarefaSelecionada.deadline}">
-                    <f:converter converterId="localDateStrictConverter"/>
-                </h:inputText>
-                <h:outputText value="Formato: dd/MM/aaaa" style="font-size: 0.8em; color: gray;"/>
+                <div class="mb-3">
+                    <label class="form-label">Prioridade:</label>
+                    <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.prioridade}" 
+                                     styleClass="form-select">
+                        <f:selectItem itemLabel="Selecione" itemValue="" />
+                        <f:selectItem itemLabel="Baixa" itemValue="Baixa" />
+                        <f:selectItem itemLabel="Média" itemValue="Média" />
+                        <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                    </h:selectOneMenu>
+                </div>
 
-            </h:panelGrid>
-            <h:commandButton value="Salvar" action="#{tarefaController.save()}" />
-            <h:commandButton value="Cancelar" action="lista-tarefas?faces-redirect=true" />
-          
-        </h:form>
+                <div class="mb-3">
+                    <label class="form-label">Deadline:</label>
+                    <h:inputText value="#{tarefaController.tarefaSelecionada.deadline}" 
+                                 styleClass="form-control">
+                        <f:converter converterId="localDateStrictConverter"/>
+                    </h:inputText>
+                    <small class="text-muted">Formato: dd/MM/aaaa</small>
+                </div>
 
+                <div class="mt-4">
+                    <h:commandButton value="Salvar" 
+                                     action="#{tarefaController.save()}" 
+                                     styleClass="btn btn-primary me-2" />
+                    <h:commandButton value="Cancelar" 
+                                     action="lista-tarefas?faces-redirect=true" 
+                                     styleClass="btn btn-secondary" />
+                </div>
+            </h:form>
+        </div>
     </h:body>
 </f:view>
 </html>
