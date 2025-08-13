@@ -41,7 +41,7 @@ Dependência JSF 2.3 (conforme o arquivo pom.xml)
 
 - Em Project Explorer, clique com o botão direito do mouse sobre o projeto e clique em Run As > Run on Server
 
-## Schqma do Banco de dados
+## Schema do Banco de dados
 
 Tabela: tarefa
 id SERIAL PRIMARY KEY,
