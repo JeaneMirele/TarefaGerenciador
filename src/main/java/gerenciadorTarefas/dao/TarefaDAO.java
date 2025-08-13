@@ -1,6 +1,8 @@
 package gerenciadorTarefas.dao;
 
 import gerenciadorTarefas.model.Tarefa;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -116,20 +118,94 @@ public class TarefaDAO {
         }
     }
     
-
-    public List<String> listarResponsaveis() {
-        String sql = "SELECT DISTINCT responsavel FROM tarefas WHERE responsavel IS NOT NULL AND responsavel != '' ORDER BY responsavel";
-        List<String> responsaveis = new ArrayList<>();
-        try (java.sql.Connection conn = (java.sql.Connection) ConnectionFactory.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+    public List<Tarefa> buscaTitulo(String texto) {
+        String sql = "SELECT * FROM tarefas WHERE LOWER(titulo) LIKE LOWER(?)";
+        List<Tarefa> tarefas = new ArrayList<>();
+        
+        try (Connection conn = ConnectionFactory.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            while (rs.next()) {
-                responsaveis.add(rs.getString("responsavel"));
+            stmt.setString(1, "%" + texto + "%");
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Tarefa tarefa = new Tarefa();
+                 
+                    tarefa.setId(rs.getLong("id"));
+                    tarefas.add(tarefa);
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao listar responsáveis: " + e.getMessage());
+            System.err.println("Erro ao buscar tarefas por título: " + e.getMessage());
         }
-        return responsaveis;
+        return tarefas;
     }
+    
+    
+    public List<Tarefa> buscaSituacao(String situacao) {
+        String sql = "SELECT * FROM tarefas WHERE situacao = ?";
+        List<Tarefa> tarefas = new ArrayList<>();
+        
+        try (Connection conn = ConnectionFactory.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, situacao.toUpperCase());
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Tarefa tarefa = new Tarefa();
+                    
+                    tarefa.setId(rs.getLong("id"));
+                    tarefa.setTitulo(rs.getString("titulo"));
+                    tarefa.setDescricao(rs.getString("descricao"));
+                    tarefa.setResponsavel(rs.getString("responsavel"));
+                    tarefa.setPrioridade(rs.getString("prioridade"));
+                    tarefa.setDeadline(rs.getObject("deadline", LocalDate.class));
+                    tarefa.setSituacao(rs.getString("situacao"));
+                    tarefas.add(tarefa);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar tarefas por situação: " + e.getMessage());
+        }
+        return tarefas;
+    }
+
+    public List<Tarefa> buscaResponsavel(String responsavel) {
+        if (responsavel == null || responsavel.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String sql = "SELECT * FROM tarefas WHERE responsavel = ?";
+        List<Tarefa> tarefas = new ArrayList<>();
+
+        try (
+            Connection conn = ConnectionFactory.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setString(1, responsavel);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.setId(rs.getLong("id"));
+                    tarefa.setTitulo(rs.getString("titulo"));
+                    tarefa.setDescricao(rs.getString("descricao"));
+                    tarefa.setResponsavel(rs.getString("responsavel"));
+                    tarefa.setPrioridade(rs.getString("prioridade"));
+                    tarefa.setDeadline(rs.getObject("deadline", LocalDate.class));
+                    tarefa.setSituacao(rs.getString("situacao"));
+                    tarefas.add(tarefa);
+                }
+            }
+        
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar tarefas por responsável: " + e.getMessage());
+            throw new RuntimeException("Erro na busca por responsável", e);
+        }
+
+        return tarefas;
+    }
+
+
 }

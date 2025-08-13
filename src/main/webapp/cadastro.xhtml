@@ -42,7 +42,8 @@
 
             </h:panelGrid>
             <h:commandButton value="Salvar" action="#{tarefaController.save()}" />
-            <h:link value="Cancelar" outcome="lista-tarefas" />
+            <h:commandButton value="Cancelar" action="lista-tarefas?faces-redirect=true" />
+          
         </h:form>
 
     </h:body>
