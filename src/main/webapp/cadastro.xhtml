@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:head>
+        <title>Cadastrar Tarefa</title>
+    </h:head>
+    <h:body>
+        <h1>Cadastrar Tarefa</h1>
+        <h:form>
+            <h:panelGrid columns="2">
+
+                <h:outputText value="Título:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.titulo}" />
+
+                <h:outputText value="Descrição:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.descricao}" />
+				
+				<h:outputText value="Responsável:" />
+                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.responsavel}">
+                    <f:selectItem itemLabel="Selecione" itemValue="" />
+				    <f:selectItem itemLabel="João Lopes" itemValue="João Lopes" />
+				    <f:selectItem itemLabel="Maria Maia" itemValue="Maria Maia" />
+				    <f:selectItem itemLabel="Rafael Cordeiro" itemValue="Rafael Cordeiro" />
+                </h:selectOneMenu>
+
+
+                <h:outputText value="Prioridade:" />
+                <h:selectOneMenu value="#{tarefaController.tarefaSelecionada.prioridade}">
+                    <f:selectItem itemLabel="Selecione" itemValue="" />
+				    <f:selectItem itemLabel="Baixa" itemValue="Baixa" />
+				    <f:selectItem itemLabel="Média" itemValue="Média" />
+				    <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                </h:selectOneMenu>
+
+            </h:panelGrid>
+            <h:commandButton value="Salvar" action="#{tarefaController.save()}" />
+            <h:link value="Cancelar" outcome="lista-tarefas" />
+        </h:form>
+
+    </h:body>
+</f:view>
+</html>
