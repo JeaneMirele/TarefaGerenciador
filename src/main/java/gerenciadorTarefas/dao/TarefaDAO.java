@@ -11,7 +11,7 @@ import java.util.List;
 public class TarefaDAO {
 
     public void adicionar(Tarefa tarefa) {
-        String sql = "INSERT INTO tarefas (titulo, descricao, responsavel, prioridade) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tarefas (titulo, descricao, responsavel, prioridade, deadline, situacao) VALUES (?, ?, ?, ?, ?, ?)";
         try (java.sql.Connection conn = (java.sql.Connection) ConnectionFactory.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -19,8 +19,8 @@ public class TarefaDAO {
             stmt.setString(2, tarefa.getDescricao());
             stmt.setString(3, tarefa.getResponsavel());
             stmt.setString(4, tarefa.getPrioridade());
-            //stmt.setObject(5, tarefa.getDeadline());
-            //stmt.setString(6, tarefa.getSituacao());
+            stmt.setObject(5, tarefa.getDeadline());
+            stmt.setString(6, tarefa.getSituacao());
             stmt.executeUpdate();
             
             System.out.println("Tarefa adicionada com sucesso!");

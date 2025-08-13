@@ -33,6 +33,12 @@
 				    <f:selectItem itemLabel="Média" itemValue="Média" />
 				    <f:selectItem itemLabel="Alta" itemValue="Alta" />
                 </h:selectOneMenu>
+                
+                <h:outputText value="Deadline:" />
+                <h:inputText value="#{tarefaController.tarefaSelecionada.deadline}">
+                    <f:converter converterId="localDateStrictConverter"/>
+                </h:inputText>
+                <h:outputText value="Formato: dd/MM/aaaa" style="font-size: 0.8em; color: gray;"/>
 
             </h:panelGrid>
             <h:commandButton value="Salvar" action="#{tarefaController.save()}" />

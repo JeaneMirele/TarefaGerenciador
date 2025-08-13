@@ -10,7 +10,7 @@ public class Tarefa {
 	    private String responsavel;
 	    private String prioridade;
 	    private LocalDate deadline;
-	    private String situacao;
+	    private String situacao = "EM ANDAMENTO";
 	    
 	    
 
@@ -26,6 +26,8 @@ public class Tarefa {
 			this.situacao = situacao;
 		}
 
+	    public Tarefa() {
+	    };
 
 
 		public Long getId() {
@@ -109,12 +111,6 @@ public class Tarefa {
 		public void setSituacao(String situacao) {
 			this.situacao = situacao;
 		}
-
-
-
-		public Tarefa() {
-	        this.situacao = "Em andamento";
-	    }
 
 }
 

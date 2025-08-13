@@ -1,6 +1,5 @@
 package gerenciadorTarefas.controller;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +40,6 @@ public class TarefaController {
 
 	    public String save() {
 	        if (tarefaSelecionada.getId() == null) {
-	        	tarefaSelecionada.setDeadline(LocalDate.now());
 	        	daoTarefa.adicionar(tarefaSelecionada);
 	        } else {
 	        	daoTarefa.atualizar(tarefaSelecionada);
