@@ -5,7 +5,9 @@
 ## Detalhes técnicos
 A. Java Web utilizando JavaServer Faces (JSF)
 
-B. Banco de dados PostgreSQL
+B. Banco de dados PostgreSQL:
+
+Operações de Crud Create - Read - Update - Delete
 
 ## Como executar
 
@@ -38,4 +40,15 @@ Dependência JSF 2.3 (conforme o arquivo pom.xml)
 - Navegue para Project > Properties > Server e configure o Apache Tomcat 9.0;
 
 - Em Project Explorer, clique com o botão direito do mouse sobre o projeto e clique em Run As > Run on Server
+
+## Schqma do Banco de dados
+
+Tabela: tarefa
+id SERIAL PRIMARY KEY,
+titulo VARCHAR(30) NOT NULL,
+descricao TEXT, 
+responsavel VARCHAR(255),
+prioridade VARCHAR(50),
+deadline VARCHAR(15),
+situacao VARCHAR(50)
 
