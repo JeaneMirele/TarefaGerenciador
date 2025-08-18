@@ -23,7 +23,7 @@ IDE Eclipse
 
 PostgreSQL
 
-Dependência JSF 2.3 (conforme o arquivo pom.xml)
+Dependência JSF 2.2 (conforme o arquivo pom.xml)
 
 ### Passos para a instalação local
 
