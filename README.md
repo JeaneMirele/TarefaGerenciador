@@ -23,7 +23,7 @@ IDE Eclipse
 
 PostgreSQL
 
-Dependência JSF 2.3 (conforme o arquivo pom.xml)
+Dependência JSF 2.2 (conforme o arquivo pom.xml)
 
 ### Passos para a instalação local
 
@@ -46,15 +46,15 @@ Dependência JSF 2.3 (conforme o arquivo pom.xml)
 Tabela: tarefa
 id SERIAL PRIMARY KEY,
 
-titulo VARCHAR(30) NOT NULL,
+titulo VARCHAR(255) NOT NULL,
 
-descricao TEXT, 
+descricao VARCHAR(255), 
 
-responsavel VARCHAR(255),
+responsavel VARCHAR(100),
 
 prioridade VARCHAR(50),
 
-deadline VARCHAR(15),
+deadline DATE,
 
 situacao VARCHAR(50)
 
