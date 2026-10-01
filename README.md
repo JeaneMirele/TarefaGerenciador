@@ -39,9 +39,6 @@ No diretório raiz do projeto, execute o comando abaixo para iniciar o container
 ```bash
 docker compose up -d
 ```
-
-> 💡 **Nota**: O banco de dados `tarefas` será inicializado automaticamente na porta padrão `5432`. As tabelas são criadas/atualizadas automaticamente pelo JPA Hibernate (`hbm2ddl.auto=update`).
-
 ---
 
 ### Passo 2: Executar a Aplicação
