@@ -9,10 +9,5 @@
         <converter-id>localDateStrictConverter</converter-id>
         <converter-class>gerenciadorTarefas.conversor.LocalDateStrictConverter</converter-class>
     </converter>
-	 <managed-bean>
-	        <managed-bean-name>tarefaController</managed-bean-name>
-	        <managed-bean-class>gerenciadorTarefas.controller.TarefaController</managed-bean-class>
-	        <managed-bean-scope>view</managed-bean-scope>
-	 </managed-bean>
 
 </faces-config>

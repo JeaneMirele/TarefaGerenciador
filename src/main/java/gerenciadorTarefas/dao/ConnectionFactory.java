@@ -4,11 +4,13 @@ package gerenciadorTarefas.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 public class ConnectionFactory {
-    private static final String URL = "jdbc:postgresql://localhost:5432/tarefas";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "98680730";
+    private static final String URL = System.getenv("DB_URL") != null 
+            ? System.getenv("DB_URL") : "jdbc:postgresql://localhost:5432/tarefas";
+    private static final String USER = System.getenv("DB_USER") != null 
+            ? System.getenv("DB_USER") : "postgres";
+    private static final String PASSWORD = System.getenv("DB_PASSWORD") != null 
+            ? System.getenv("DB_PASSWORD") : "postgres";
 
 
     public static Connection connect(){

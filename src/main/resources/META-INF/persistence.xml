@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="tarefasPU" transaction-type="JTA">
+        <jta-data-source>tarefasDatabase</jta-data-source>
+        <non-jta-data-source>tarefasDatabaseUnmanaged</non-jta-data-source>
+        <class>gerenciadorTarefas.model.Tarefa</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        
+        <properties>
+            <!-- OpenJPA PostgreSQL Dictionary -->
+            <property name="openjpa.jdbc.DBDictionary" value="postgres" />
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=WARN" />
+        </properties>
+    </persistence-unit>
+</persistence>

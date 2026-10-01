@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="tarefasDatabase" type="DataSource">
+        JdbcDriver = org.postgresql.Driver
+        JdbcUrl = jdbc:postgresql://localhost:5432/tarefas
+        UserName = postgres
+        Password = postgres
+        JtaManaged = true
+    </Resource>
+
+    <Resource id="tarefasDatabaseUnmanaged" type="DataSource">
+        JdbcDriver = org.postgresql.Driver
+        JdbcUrl = jdbc:postgresql://localhost:5432/tarefas
+        UserName = postgres
+        Password = postgres
+        JtaManaged = false
+    </Resource>
+</resources>

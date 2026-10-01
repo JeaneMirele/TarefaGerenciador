@@ -1,19 +1,41 @@
 package gerenciadorTarefas.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "tarefas")
+public class Tarefa implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-public class Tarefa {
-	    private Long id;
-	    private String titulo;
-	    private String descricao;
-	    private String responsavel;
-	    private String prioridade;
-	    private LocalDate deadline;
-	    private String situacao = "EM ANDAMENTO";
-	    
-	    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 255)
+    private String titulo;
+
+    @Column(length = 255)
+    private String descricao;
+
+    @Column(length = 100)
+    private String responsavel;
+
+    @Column(length = 50)
+    private String prioridade;
+
+    @Column
+    private LocalDate deadline;
+
+    @Column(length = 50)
+    private String situacao = "EM ANDAMENTO";
 
 	    public Tarefa(Long id, String titulo, String descricao, String responsavel, String prioridade,
 				LocalDate deadline, String situacao) {
